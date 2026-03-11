@@ -172,10 +172,11 @@ module FHIR
         site: site || @base_service_url,
         authorize_url: authorize_path,
         token_url: token_path,
-        raise_errors: true
+        raise_errors: true,
+        auth_scheme: :request_body
       }
+      options[:connection_opts] = { proxy: proxy } unless proxy.nil?
       client = OAuth2::Client.new(client, secret, options)
-      client.connection.proxy(proxy) unless proxy.nil?
       @client = client.client_credentials.get_token
     end
 
